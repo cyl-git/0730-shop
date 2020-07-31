@@ -1,10 +1,12 @@
 import VueRouter from 'vue-router'
-import home from '../component1/home.vue'
-import goodslist from '../component1/goodslist.vue'
-import login from '../component2/login.vue'
-
+import home from '../components/tabbar/home.vue'
+import member from '../components/tabbar/member.vue'
+import shopcar from '../components/tabbar/shopcar.vue'
+import search from '../components/tabbar/search.vue'
 var router = new VueRouter({
+/*     mode: 'history', */
     routes: [
+        { path: '/', redirect: '/home' },
         {
             path: '/home',
             component: home
@@ -12,11 +14,13 @@ var router = new VueRouter({
                 { path: 'login', component: login }
                 
             ] */
-
-
         },
-       /*  { path: '/goodslist', component: goodslist } */
-    ]
+        { path: '/member', component: member },
+        { path: '/shopcar', component: shopcar },
+        { path: '/search', component: search }
+
+    ],
+    linkActiveClass: 'mui-active'
 });
 
-export default  router
+export default router

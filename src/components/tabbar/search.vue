@@ -1,10 +1,8 @@
 <template>
     <div>
-        我是goodslist组件内容
+        搜索组件
        
-        <button type="button" class="mui-btn">
-					默认
-				</button>
+ 
     </div>
 </template>
 <script>
