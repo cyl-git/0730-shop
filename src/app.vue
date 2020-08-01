@@ -5,7 +5,7 @@
 
     
     <transition >
-      <router-view></router-view>
+      <router-view style='padding:0 20px;'></router-view>
     </transition>
     
 
@@ -43,6 +43,7 @@ export default {};
   box-sizing: border-box;
   height:100%;
   overflow-x:hidden;
+  padding-bottom:50px;
 }
 .v-enter {
    opacity: 0;

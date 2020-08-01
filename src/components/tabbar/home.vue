@@ -1,9 +1,9 @@
 <template>
   <div>
     <!-- 轮播图 -->
-    <div style="height:200px; background-color:red ">
+    <div style="height:200px; background-color:red;margin-left:-20px; margin-right:-20px ">
       <mt-swipe :auto="4000">
-        <mt-swipe-item v-for="item in lunbotu">
+        <mt-swipe-item v-for="item in lunbotu" :key="item.img">
           <a :href="item.url">
             <img :src="item.img" />
           </a>
@@ -15,11 +15,12 @@
     <div class="mui-content">
       <ul class="mui-table-view mui-grid-view mui-grid-9">
         <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-          <a href="#">
+          <router-link to="/home/newslist">
             <span class="mui-icon mui-icon-home"></span>
             <div class="mui-media-body">新闻资讯</div>
-          </a>
+          </router-link>
         </li>
+
         <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
           <a href="#">
             <span class="mui-icon mui-icon-email">
@@ -54,6 +55,10 @@
         </li>
       </ul>
     </div>
+
+    <router-view></router-view>
+
+    
   </div>
 </template>
 <script>
@@ -89,18 +94,17 @@ export default {
 }
 .mui-grid-view.mui-grid-9 {
   background-color: #fff;
-  border:none
+  border: none;
 }
 .mui-grid-view.mui-grid-9 .mui-table-view-cell {
   border: none;
   .mui-icon {
     border-radius: 50%;
     padding: 10px;
-    color:#fff;
+    color: #fff;
     font-size: 32px;
-    
   }
-  .mui-media-body{
+  .mui-media-body {
     font-size: 14px;
   }
   &:nth-child(1) {
@@ -110,7 +114,7 @@ export default {
   }
   &:nth-child(2) {
     .mui-icon {
-      background-color:red;
+      background-color: red;
     }
   }
   &:nth-child(3) {
@@ -134,5 +138,4 @@ export default {
     }
   }
 }
-
 </style>

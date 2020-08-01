@@ -1,7 +1,7 @@
 const path = require('path')
 
 const htmlWebpackPlugin = require('html-webpack-plugin')
-const {VueLoaderPlugin}   = require('vue-loader')
+const { VueLoaderPlugin } = require('vue-loader')
 
 
 /* import VueLoaderPlugin from  'vue-loader' */
@@ -9,7 +9,7 @@ const {VueLoaderPlugin}   = require('vue-loader')
 
 
 module.exports = {
-    
+
     entry: path.join(__dirname, './src/main.js'), //   entry 入口
     output: {                                     //   output 出口
         path: path.join(__dirname, './dist'),
@@ -29,7 +29,18 @@ module.exports = {
             { test: /\.css$/, use: ['style-loader', 'css-loader'] },
             { test: /\.less$/, use: ['style-loader', 'css-loader', 'less-loader'] },
             { test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader'] },
-            { test: /\.jpg|png|gif|bmp|jpeg$/, use: 'url-loader?limit=83,054' },
+            {
+                test: /\.jpg|png|gif|bmp|jpeg$/,
+                use: {
+                    loader: 'url-loader',
+                    options: {
+                        name: '[name].[ext]',  //打包出来的图片名字和后缀都和之前的一样
+                        outputPath: "images/",
+                        limit: 2048 ,//当图片大小超过2048个字节的时候，将打包的图片存在dist/images文件夹中，否则直接改为base64格式放在bundle.js中，可以减少http请求
+                        esModule: false
+                    }
+                }
+            },
             { test: /\.ttf|eot|svg|woff|woff2$/, use: 'url-loader' },
             {
                 test: /\.js/,
