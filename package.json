@@ -16,7 +16,7 @@
   "author": "cyl",
   "license": "ISC",
   "dependencies": {
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^3.4.1",
     "jquery": "^3.5.1",
     "mint-ui": "^2.2.13",
     "moment": "^2.27.0",
