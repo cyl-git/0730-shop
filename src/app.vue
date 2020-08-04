@@ -56,4 +56,32 @@ export default {};
 .v-enter-active,.v-leave-active{
   transition: all 0.4s ease;
 }
+.mui-bar-tab .mui-tab-item1.mui-active {
+    color: #007aff;
+}
+.mui-bar-tab .mui-tab-item1 {
+    display: table-cell;
+    overflow: hidden;
+    width: 1%;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #929292;
+}
+.mui-bar-tab .mui-tab-item1.mui-active[data-v-5ef48958] {
+    color: #007aff;
+}
+.mui-bar-tab .mui-tab-item1[data-v-5ef48958] {
+    display: table-cell;
+    overflow: hidden;
+    width: 1%;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #929292;
+}
 </style>

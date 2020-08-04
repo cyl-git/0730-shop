@@ -1,7 +1,7 @@
 export default{
     
-        "status": 0,
-        "message": [
+        status: 0,
+        message: [
              {
                  "user_name": "匿名用户",
                  "add_time": "2015-04-19T20:09:30.000Z",
