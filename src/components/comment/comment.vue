@@ -2,68 +2,87 @@
   <div>
     <div>评论---{{this.comid}}</div>
     <div>
-      <textarea placeholder="请输入内容" class="textarea" maxlength="120" v-model='msg'></textarea>
+      <textarea placeholder="请输入内容" class="textarea" maxlength="120" v-model="msg"></textarea>
     </div>
     <div>
-      <mt-button type="primary" size="large" @click='postComment'>提交</mt-button>
+      <mt-button type="primary" size="large" @click="postComment">提交</mt-button>
     </div>
     <div class="com-list" v-for="(item,i) in comments" :key="i" v-if="item.user_name">
       <div
         class="tit"
-      >第{{i+1}}楼 &nbsp; &nbsp; {{ item.user_name}} &nbsp; &nbsp; {{item.add_time | dataFormat(' YYYY-MM-DD')}}</div>
-      <div class="cont">{{item.content}}</div>
+      >第{{i+1}}楼 &nbsp; &nbsp; {{ item.user_name}} &nbsp; &nbsp; {{item.add_time | dateFormat(' YYYY-MM-DD')}}</div>
+      <div class="cont">{{item.content==='undefined'?'此用户没有评论···':item.content}}</div>
     </div>
 
     <div>
-      <mt-button type="primary" size="large" plain @click="getComments">加载更多</mt-button>
+      <mt-button type="primary" size="large" plain @click="getMore">加载更多</mt-button>
     </div>
   </div>
 </template>
 <script>
 /* var comt_json=require ('./../../data/comments.json') */
 import comt_json from "../../data/comments.js";
-import { Toast } from 'mint-ui';
+import { Toast } from "mint-ui";
 export default {
   data() {
     return {
       pageindex: 1,
       comments: [],
-      num: 0, //所有的评论数据
-      msg:''
+      msg: "",
     };
   },
+  props: ["comid"],
   created() {
     this.getComments();
-  },
+    /*  this.getMore() */
+  } /* 'api/getcomments/'+ this.comid+ '?pageindex='+ this. pageindex  */,
   methods: {
     getComments() {
-      this.num += 5;  
-      this.comments = comt_json.message.slice(0, this.num);
-      if (this.num > comt_json.message.length && comt_json.message.length < this.num -5) {
-       Toast('已经是全部数据了，没有更多了')
-      }
+      this.$http
+        .get("api/getcomments/" + this.comid + "?pageindex=" + this.pageindex)
+        .then((res) => {
+          if (res.body.status === 0) {
+            this.comments = this.comments.concat(res.body.message);
+            if (res.body.message == 0) {
+              Toast("已经是全部评论了...");
+            }
+          } else {
+            alert("加载图片分类，数据错误");
+          }
+        });
     },
-    postComment(){
-      if(this.msg.trim().length===0){
-        Toast('输入内容不能为空')
-        return
-      }else{
-        var newMsg={
-          user_name: "匿名用户",
-                 add_time: Date.now(),
-                 content: this.msg.trim()
-        }
-      }
-      // this.comments.unshift(newMsg)
-       comt_json.message.unshift(newMsg)
+    getMore() {
+      this.pageindex++;
+      this.getComments();
+    },
 
-      this.msg=''
-       this.num -= 5;  
-      this.getComments()
-      console.log( comt_json.message)
-    }
-  },
-  props: ["comid"],
+    postComment() {
+      if (this.msg.trim().length === 0) {
+        Toast("输入内容不能为空");
+        return;
+      } else {
+        var newMsg = {
+          user_name: "匿名用户",
+          add_time: Date.now(),
+          content: this.msg.trim(),
+        };
+      }
+      this.$http
+        .post("api/postcomment/" + this.comid, {
+          content: this.msg.trim(),
+        })
+        .then(function (res) {
+          if (res.body.status === 0) {
+            this.comments.unshift(newMsg);
+            this.msg = "";
+            Toast(res.body.message);
+           
+          }
+        });
+
+      /* this.comments.unshift(newMsg) */
+    },
+  }
 };
 </script>
 <style  lang='scss' scoped>

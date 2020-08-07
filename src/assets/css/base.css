@@ -4,3 +4,11 @@
 body{
     background-color: #fff; font-size: 14px;
 }
+ul,li{
+    list-style: none;
+}.clear{
+    clear:both;
+    font-size:0;
+    height:0;
+    line-height:0;
+}

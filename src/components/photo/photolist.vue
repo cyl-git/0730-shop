@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-left:-20px;margin-right:-20px;">
+  <div style="margin-left:-10px;margin-right:-10px;">
     <!-- mui 中的 tab-top-webview-main 组件 -->
 
     <div id="slider" class="mui-slider">
@@ -9,42 +9,122 @@
       >
         <div class="mui-scroll">
           <a
-            class="mui-control-item mui-active"
-            href="#item1mobile"
-            data-wid="tab-top-subpage-1.html"
-          >推荐</a>
-          <a class="mui-control-item" href="#item2mobile" data-wid="tab-top-subpage-2.html">热点</a>
-          <a class="mui-control-item" href="#item3mobile" data-wid="tab-top-subpage-3.html">北京</a>
-          <a class="mui-control-item" href="#item4mobile" data-wid="tab-top-subpage-4.html">社会</a>
-          <a class="mui-control-item" href="#item5mobile" data-wid="tab-top-subpage-5.html">娱乐</a>
-          <a class="mui-control-item" href="#item5mobile" data-wid="tab-top-subpage-5.html">生活</a>
-          <a class="mui-control-item" href="#item5mobile" data-wid="tab-top-subpage-5.html">电影</a>
-          <a class="mui-control-item" href="#item5mobile" data-wid="tab-top-subpage-5.html">动漫</a>
+           
+            :class="['mui-control-item', item.id===0? 'mui-active':'' ]"
+            v-for="item in cates"
+            :key="item.id"
+            @click="getPhotoListByCateId(item.id)"
+          >{{item.title}}</a>
         </div>
       </div>
     </div>
+
+    <ul class="imgInfoList">
+      <li v-for="item in photolist" :key="item.id">
+        <router-link  :to=" '/home/photoxq/'+item.id ">
+          <img v-lazy="item.img_url" />
+          <div class="imgInfoText">
+            <h3>{{item.title}}</h3>
+            <p>{{item.zhaiyao}}</p>
+          </div>
+        </router-link>
+      </li>
+    </ul>
   </div>
 </template>
 <script>
+import Vue from "vue";
 import mui from "../../lib/mui/dist/js/mui.js";
-import viewjs from "../../lib/mui/dist/js/webviewGroup.js";
+import { Lazyload } from "mint-ui";
 
+Vue.use(Lazyload);
 export default {
   data() {
-    return {};
+    return {
+      cates: [], //所有图片分类 横向
+      photolist: [], //分类下的list数据
+    };
+  },
+  created() {
+    this.getAllCategory();
+    this.getPhotoListByCateId(0);
   },
   mounted() {
     mui(".mui-scroll-wrapper").scroll({
       deceleration: 0.0005, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
     });
   },
-  methods: {},
+  methods: {
+    //http://www.liulongbin.top:3005/api/getimgcategory
+    getAllCategory() {
+      this.$http.get("api/getimgcategory").then((res) => {
+        if (res.body.status === 0) {
+          res.body.message.unshift({ id: 0, title: "全部" });
+          this.cates = res.body.message;
+        } else {
+          alert("加载图片分类，数据错误");
+        }
+      });
+    },
+    getPhotoListByCateId(cateId) {
+      this.$http.get("api/getimages/" + cateId).then((res) => {
+        /*  console.log(cateId) */
+        if (res.body.status === 0) {
+          this.photolist = res.body.message;
+          
+        } else {
+          alert("加载图片分类，数据错误");
+        }
+      });
+    },
+  },
 };
 </script>
-<style scoped>
+<style  lang='scss' scoped>
 * {
   touch-action: pan-y;
 }
+.imgInfoList {
+  padding: 10px;
+  li {
+    margin-bottom: 10px;
+    background-color: #ccc;
+    position: relative;
+    text-align: center;
+    img {
+      width: 100%;
+    }
+    img[lazy="loading"] {
+      width: 40px;
+      height: 300px;
+      margin: auto;
+    }
+    .imgInfoText {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      color: #fff;
+      text-align: left;
+      h3 {
+        margin-bottom: 10px;
+        font-size: 18px;
+        line-height: 1.4em;
+      }
+      p {
+        color: #fff;
+        text-overflow: -o-ellipsis-lastline;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+    }
+  }
+}
+
 .mui-pull-top-tips {
   position: absolute;
   top: -20px;
