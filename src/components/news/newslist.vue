@@ -5,7 +5,7 @@
         <router-link  :to=" '/home/newsxq/'+item.id " ><!--  :to=" '/home/newslist/'+ item.id"    -->
           <img class="mui-media-object mui-pull-left" :src="item.img_url" />
           <div class="mui-media-body">
-            {{item.title}}
+           {{item.id}}---{{item.title}}
             <p class="mui-ellipsis">{{item.sunT}}</p>
             <div class="time">
               <span>时间： {{item.add_time | dateFormat}}</span>

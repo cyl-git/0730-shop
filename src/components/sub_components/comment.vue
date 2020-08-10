@@ -33,17 +33,17 @@ export default {
   },
   props: ["comid"],
   created() {
-    this.getComments();
+    this.getComments(1);
     /*  this.getMore() */
   } /* 'api/getcomments/'+ this.comid+ '?pageindex='+ this. pageindex  */,
   methods: {
-    getComments() {
+    getComments(id) {
       this.$http
         .get("api/getcomments/" + this.comid + "?pageindex=" + this.pageindex)
         .then((res) => {
           if (res.body.status === 0) {
             this.comments = this.comments.concat(res.body.message);
-            if (res.body.message == 0) {
+            if (res.body.message.length == 0 && id !==1) {
               Toast("已经是全部评论了...");
             }
           } else {

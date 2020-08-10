@@ -8,7 +8,7 @@ import newsxq from '../components/news/newsxq.vue'
 import photolist from '../components/photo/photolist.vue'
 import photoxq from '../components/photo/photoxq.vue'
 import goodslist from '../components/goods/goodslist.vue'
-
+import goodsxq from '../components/goods/goodsxq.vue'
 
 var router = new VueRouter({
 /*     mode: 'history', */
@@ -26,10 +26,11 @@ var router = new VueRouter({
         { path: '/shopcar', component: shopcar },
         { path: '/search', component: search },
         { path: '/home/newslist', component: newslist },
-        { path: '/home/newsxq/:id', component: newsxq },
+        { path: '/home/newsxq/:id', component: newsxq , props:true },
         { path: '/home/photolist', component: photolist },
-        { path: '/home/photoxq/:id', component: photoxq },
-        { path: '/home/goodslist', component: goodslist }
+        { path: '/home/photoxq/:id', component: photoxq , props:true },
+        { path: '/home/goodslist', component: goodslist },
+        { path: '/home/goodsxq/:id', component: goodsxq , props:true }
 
     ],
     linkActiveClass: 'mui-active'

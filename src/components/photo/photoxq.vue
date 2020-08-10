@@ -10,7 +10,7 @@
       </div>
 
       <!-- <img class='preview-img' v-for='(item ,index) in list' :src='item.src' height='100' @click='$preview.open(index,list)' :key='item.index' > -->
-      <vue-preview :slides='list' class="preview"></vue-preview>
+      <vue-preview :slides='thumbsList' class="preview"></vue-preview>
       <div class='clear'></div>
       <div class="content" v-html="photoInfo.content"></div>
 
@@ -19,13 +19,13 @@
   </div>
 </template>
 <script>
-import comment from "../comment/comment.vue";
+import comment from "../sub_components/comment.vue";
 export default {
   data() {
     return {
       id: this.$route.params.id,
       photoInfo: {},
-      list:[]
+      thumbsList:[]
     };
   },
   created() {
@@ -37,26 +37,22 @@ export default {
       this.$http.get("api/getimageinfo/" + this.id).then((res) => {
         if (res.body.status === 0) {
           this.photoInfo = res.body.message[0];
-          
         } else {
-          alert("加载新闻详情，数据错误");
+          alert("加载图片详情，数据错误");
         }
       });
     },
     getThumbs(){
         this.$http.get('api/getthumimages/'+this.id).then(res=>{
         if (res.body.status === 0) {
-
           res.body.message.forEach(item=>{
               item.w=600
               item.h=400
               item.msrc=item.src
           })
-
-          this.list = res.body.message;
-          console.log( this.list);
+          this.thumbsList = res.body.message;
         } else {
-          alert("加载新闻详情，数据错误");
+          alert("加载图片详情中的轮播图图片，数据错误");
         }
         })
     }
