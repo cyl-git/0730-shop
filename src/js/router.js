@@ -9,28 +9,31 @@ import photolist from '../components/photo/photolist.vue'
 import photoxq from '../components/photo/photoxq.vue'
 import goodslist from '../components/goods/goodslist.vue'
 import goodsxq from '../components/goods/goodsxq.vue'
-
+import goodsDesc from '../components/goods/goodsDesc.vue'
+import goodsComment from '../components/goods/goodsComment.vue'
 var router = new VueRouter({
-/*     mode: 'history', */
+    /*     mode: 'history', */
     routes: [
         { path: '/', redirect: '/home' },
         {
             path: '/home',
             component: home
-        /*     children: [
-                { path: 'newslist', component: newslist }
-                
-            ] */
+            /*     children: [
+                    { path: 'newslist', component: newslist }
+                    
+                ] */
         },
         { path: '/member', component: member },
         { path: '/shopcar', component: shopcar },
         { path: '/search', component: search },
         { path: '/home/newslist', component: newslist },
-        { path: '/home/newsxq/:id', component: newsxq , props:true },
+        { path: '/home/newsxq/:id', component: newsxq, props: true },
         { path: '/home/photolist', component: photolist },
-        { path: '/home/photoxq/:id', component: photoxq , props:true },
+        { path: '/home/photoxq/:id', component: photoxq, props: true },
         { path: '/home/goodslist', component: goodslist },
-        { path: '/home/goodsxq/:id', component: goodsxq , props:true }
+        { path: '/home/goodsxq/:id', component: goodsxq, props: true, },
+        { path: '/home/goodsdesc/:id', component: goodsDesc, props: true },
+        { path: '/home/goodscomment/:id', component: goodsComment, props: true }
 
     ],
     linkActiveClass: 'mui-active'

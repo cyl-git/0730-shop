@@ -1,7 +1,13 @@
 <template>
   <div class="mainApp">
     <div style="height:40px;">占位</div>
-    <mt-header fixed title="vue购物"></mt-header>
+    <!-- <mt-header fixed title="vue购物"></mt-header> -->
+
+    <mt-header title="vue购物" fixed>
+      <span slot="left" @click="goBack" v-show="flag">
+        <mt-button icon="back">返回</mt-button>
+      </span>
+    </mt-header>
 
     <transition>
       <router-view style="padding:0 10px;"></router-view>
@@ -18,7 +24,7 @@
       </router-link>
       <router-link class="mui-tab-item1" to="/shopcar">
         <span class="mui-icon mui-icon-extra mui-icon-extra-cart">
-          <span class="mui-badge">9</span>
+          <span class="mui-badge" id="car">9</span>
         </span>
         <span class="mui-tab-label">购物车</span>
       </router-link>
@@ -31,7 +37,36 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      flag: true,
+    };
+  },
+  created() {
+    if (this.$route.path === "/home") {
+      this.flag = false;
+    } else {
+      this.flag = true;
+    }
+    console.log("app组件创建完成");
+  },
+  mounted() {},
+  methods: {
+    goBack() {
+      this.$router.go(-1);
+    },
+  },
+  watch: {
+    "$route.path": function (newVal, oldVal) {
+      if (newVal === "/home") {
+        this.flag = false;
+      } else {
+        this.flag = true;
+      }
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .mainApp {
@@ -39,6 +74,9 @@ export default {};
   height: 100%;
   overflow-x: hidden;
   padding-bottom: 50px;
+}
+h1.mint-header-title {
+  border: 1px solid #000;
 }
 .v-enter {
   opacity: 0;
@@ -75,9 +113,9 @@ export default {};
   padding-bottom: 0;
 }
 .mui-bar-tab .mui-tab-item1 .mui-icon ~ .mui-tab-label {
-    font-size: 11px;
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-size: 11px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

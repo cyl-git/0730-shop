@@ -2,8 +2,7 @@
   <div>
     <!-- 轮播图 -->
     <div style="height:200px; background-color:red;margin-left:-10px; margin-right:-10px ">
-      <swiper :swiper='lunbotu' :imgname=" 'img' " :isfull='true'></swiper>
-     
+      <swiper :swiper="lunbotu" :imgname=" 'img' " :isfull="true"></swiper>
     </div>
 
     <!-- 6宫格 -->
@@ -17,7 +16,7 @@
         </li>
 
         <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-            <router-link to="/home/photolist">
+          <router-link to="/home/photolist">
             <span class="mui-icon mui-icon-email">
               <span class="mui-badge">5</span>
             </span>
@@ -29,9 +28,9 @@
           <router-link to="/home/goodslist">
             <span class="mui-icon mui-icon-chatbubble"></span>
             <div class="mui-media-body">商品购买</div>
-           </router-link>
+          </router-link>
         </li>
-        
+
         <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
           <a href="#">
             <span class="mui-icon mui-icon-location"></span>
@@ -47,19 +46,18 @@
         <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
           <a href="#">
             <span class="mui-icon mui-icon-phone"></span>
-            <div class="mui-media-body">练习我们</div>
+            <div class="mui-media-body">练习我们{{cyl_count}}</div>
           </a>
         </li>
       </ul>
     </div>
 
     <router-view></router-view>
-
-    
   </div>
 </template>
 <script>
-import swiper from "../sub_components/swiper.vue"
+import swiper from "../sub_components/swiper.vue";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -78,17 +76,16 @@ export default {
     };
   },
   created() {
-    console.log("创建组件完成");
+    console.log("首页创建组件完成");
   },
   methods: {},
-  components:{
-    swiper
-  }
+  components: {
+    swiper,
+  },
+  computed: { ...mapState(["cyl_count"]) },
 };
 </script>
 <style lang="scss" scoped>
-
-
 .mui-grid-view.mui-grid-9 {
   background-color: #fff;
   border: none;

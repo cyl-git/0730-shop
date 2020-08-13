@@ -1,6 +1,10 @@
 <template>
   <div class="contain">
     商品详情--{{id}}
+    <!--加入购物车小球动画 -->
+    <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+      <div class="bell" v-show="flag" ref="bell"></div>
+    </transition>
     <!-- 轮播图区域 -->
     <div class="mui-card">
       <div class="mui-card-content">
@@ -13,67 +17,88 @@
 
     <!-- 商品购买区域 -->
     <div class="mui-card">
-      <div class="mui-card-header">页眉</div>
+      <div class="mui-card-header">{{goodsInfo.title}}</div>
       <div class="mui-card-content">
-        <div class="mui-card-content-inner">
+        <div class="mui-card-content-inner buyBox">
           <div class="price">
             <span>
               销售价：
-              <b >￥2199</b>
+              <b>￥{{goodsInfo.sell_price}}</b>
             </span>&nbsp;&nbsp;&nbsp;&nbsp;
             <span>
               市场价：
-              <span style='text-decoration: line-through;'>￥2699</span>
+              <span>￥{{goodsInfo.market_price}}</span>
             </span>
           </div>
 
           <div>
             购买数量：
-            <div class="mui-numbox" data-numbox-step="1" data-numbox-min="0" data-numbox-max="100">
-              <button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
-              <input class="mui-numbox-input" type="number" />
-              <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
-            </div>
+            <!-- goodsInfo 是页面发送ajax请求回来的数据，可能会出现nobox 组件先渲染出来,这时候goodsInfo还是空对象，传递到子组件中的stock_quantity就是undifined ,所以在子组件中用props接收到的就是undefined -->
+            <nobox :max="goodsInfo.stock_quantity" @func="getSelectedCount" id="cPos"></nobox>
           </div>
 
-          <p>
-            <mt-button type="primary" size='small'>立即购买</mt-button>
-            <mt-button type="danger" size='small'>加入购物车</mt-button>
-          </p>
+          <div>
+            <mt-button type="primary" size="small">立即购买</mt-button>
+
+            <mt-button type="danger" size="small" @click="addCar">加入购物车</mt-button>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- 商品详情区域 -->
     <div class="mui-card">
-      <div class="mui-card-header">页眉</div>
+      <div class="mui-card-header">商品参数</div>
       <div class="mui-card-content">
-        <div class="mui-card-content-inner">包含页眉页脚的卡片，页眉常用来显示面板标题，页脚用来显示额外信息或支持的操作（比如点赞、评论等）</div>
+        <div class="mui-card-content-inner goods_xq">
+          <p>商品货号：{{goodsInfo.goods_no}}</p>
+          <p>库存情况：{{goodsInfo.stock_quantity}}件</p>
+          <p>上架时间：{{goodsInfo.add_time | dateFormat('YYYY-MM-DD')}}</p>
+        </div>
       </div>
-      <div class="mui-card-footer">页脚</div>
+      <div class="mui-card-footer btnArea">
+        <mt-button type="primary" size="large" plain @click="toHref">图文介绍</mt-button>
+
+        <mt-button type="danger" size="large" plain @click="toprdComment">商品评论</mt-button>
+
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
 <script>
 import swiper from "../sub_components/swiper.vue";
+import nobox from "../sub_components/goodsinfo_nobox.vue";
+import comment from "../sub_components/comment.vue";
 export default {
   data() {
     return {
       /*  id: this.$route.params.id, */
+      flag: false,
       goodsInfo: {},
       thumbsList: [],
+      windowHeight: 0,
+      count: 1,
     };
   },
   created() {
     this.getGoodsInfo();
     this.getThumbs();
   },
+  mounted() {
+    this.windowHeight = window.innerHeight;
+    /* console.log(this.windowHeight); */
+    var _this = this;
+    window.onresize = function () {
+      _this.windowHeight = window.innerHeight;
+      /* console.log(_this.windowHeight); */
+    };
+  },
   methods: {
     getGoodsInfo() {
-      this.$http.get("api/getimageinfo/" + this.id).then((res) => {
+      this.$http.get("api/goods/getinfo/" + this.id).then((res) => {
         if (res.body.status === 0) {
           this.goodsInfo = res.body.message[0];
-          console.log(this.goodsInfo);
         } else {
           alert("加载购买详情，数据错误");
         }
@@ -88,11 +113,51 @@ export default {
         }
       });
     },
+    toHref() {
+      this.$router.push("/home/goodsdesc/" + this.id);
+    },
+    toprdComment() {
+      this.$router.push("/home/goodsComment/" + this.id);
+    },
+    addCar() {
+      this.flag = true;
+      console.log(this.count);
+      //开始调用store中的mutations中的addToCar方法来操作state中的cart购物车 ，这个方法需要传递一个添加的商品id和count
+      this.$store.commit("addToCar", {
+        id: this.id,
+        count: this.count,
+      });
+    },
+    beforeEnter(el) {
+      el.style.transform = "translate(0,0)";
 
+      const yyyy = document.querySelector("#cPos").getBoundingClientRect();
+      el.style.top = yyyy.top + "px";
+    },
+    enter(el, done) {
+      el.offsetWidth;
+      const bellPos = el.getBoundingClientRect();
+      const carPos = document.querySelector("#car").getBoundingClientRect();
+      var x = carPos.left - bellPos.left + "px";
+      var y = carPos.top - bellPos.top + "px";
+      el.style.transform = "translate(" + x + "," + y + ")";
+      el.style.transition = "all 0.5s  cubic-bezier(.33,-0.44,1,.79)";
+
+      done();
+    },
+    afterEnter(el) {
+      this.flag = !this.flag;
+    },
+    getSelectedCount(c) {
+      console.log("父组件拿到数值" + c);
+      this.count = c;
+    },
   },
   props: ["id"],
   components: {
     swiper,
+    nobox,
+    comment,
   },
 };
 </script>
@@ -100,19 +165,42 @@ export default {
 .contain {
   min-height: calc(100vh - 90px);
   background-color: #f7f7f7;
-  .price{
-  color:#999;
-  b{
-    font-size: 18px;
-    color:red;
+  .buyBox > div {
+    margin-top: 10px;
   }
-  span{
-    span{
-      text-decoration: line-through;
+  .price {
+    color: #999;
+    b {
+      font-size: 18px;
+      color: red;
+    }
+    span {
+      span {
+        text-decoration: line-through;
+      }
+    }
+  }
+  .goods_xq > p {
+    color: #999;
+    margin-bottom: 10px;
+  }
+  .btnArea {
+    display: block;
+    > .mint-button {
+      margin: 10px 0;
     }
   }
 
+  .bell {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: red;
+    border-radius: 50%;
+    z-index: 900;
+    /* top: 456px; */
+    left: 160px;
+    /*  transform: translate(78px, 168px); */
+  }
 }
-}
-
 </style>

@@ -1,6 +1,12 @@
 <template>
   <div class="goods_list">
-    <router-link tag="div" class="prd_list" v-for="item in goodslist" :key="item.id" :to=" '/home/goodsxq/'+item.id " >
+    <router-link
+      tag="div"
+      class="prd_list"
+      v-for="item in goodslist"
+      :key="item.id"
+      :to=" '/home/goodsxq/'+item.id "
+    >
       <div class="imgBox">
         <img :src="item.img_url" width="100%" />
       </div>
@@ -20,7 +26,9 @@
     </router-link>
 
     <div class="clear"></div>
-    <div class='bottom_btn'><mt-button type="primary" size="large"  @click="getMoreGoods">加载更多</mt-button></div>
+    <div class="bottom_btn">
+      <mt-button type="primary" size="large" @click="getMoreGoods">加载更多</mt-button>
+    </div>
   </div>
 </template>
 <script>
@@ -28,48 +36,39 @@ import { Toast } from "mint-ui";
 export default {
   data() {
     return {
-      page: 1,  //默认展示第一页的数据
+      page: 1, //默认展示第一页的数据
       goodslist: [], //商品列表
-      isloaded:false
-
+      isloaded: false,
     };
   },
   created() {
     this.getGoodsList(1);
- 
   },
   methods: {
     getGoodsList(id) {
-
       //根据页码获取商品列表
-      this.$http.get("api/getgoods?pageindex="+this.page).then((res) => {
+      this.$http.get("api/getgoods?pageindex=" + this.page).then((res) => {
         if (res.body.status === 0) {
           /*  res.body.message.unshift({ id: 0, title: "全部" }); */
-          
-         
-          if(res.body.message.length===0 && id !== 1){
-              this.isloaded=true
-              Toast('没有更多了')
-              return;
+
+          if (res.body.message.length === 0 && id !== 1) {
+            this.isloaded = true;
+            Toast("没有更多了");
+            return;
           }
           this.goodslist = this.goodslist.concat(res.body.message);
-        console.log(res.body.message);
+          /* console.log(res.body.message); */
         } else {
           alert("加载图片分类，数据错误");
         }
-      })
-
-
-
+      });
     },
-    getMoreGoods(){
-        //如果没有更多数据了  就不再执行下面的代码了
-        if(this.isloaded) return
-        this.page ++
-         this.getGoodsList();
-
-    }
-
+    getMoreGoods() {
+      //如果没有更多数据了  就不再执行下面的代码了
+      if (this.isloaded) return;
+      this.page++;
+      this.getGoodsList();
+    },
   },
 };
 </script>
@@ -96,9 +95,9 @@ export default {
   }
   h3 {
     font-size: 14px;
-     line-height: 1.4em;
+    line-height: 1.4em;
     /*padding: 10px; */
-    margin:10px;
+    margin: 10px;
     text-overflow: -o-ellipsis-lastline;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -131,7 +130,7 @@ export default {
 .prd_list:nth-child(odd) {
   margin-right: 3%;
 }
-.bottom_btn{
-    margin:10px 0;
+.bottom_btn {
+  margin: 10px 0;
 }
 </style>

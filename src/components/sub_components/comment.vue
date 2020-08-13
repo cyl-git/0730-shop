@@ -34,8 +34,7 @@ export default {
   props: ["comid"],
   created() {
     this.getComments(1);
-    /*  this.getMore() */
-  } /* 'api/getcomments/'+ this.comid+ '?pageindex='+ this. pageindex  */,
+  },
   methods: {
     getComments(id) {
       this.$http
@@ -43,9 +42,10 @@ export default {
         .then((res) => {
           if (res.body.status === 0) {
             this.comments = this.comments.concat(res.body.message);
-            if (res.body.message.length == 0 && id !==1) {
+            if (res.body.message.length == 0 && id !== 1) {
               Toast("已经是全部评论了...");
             }
+            console.log(this.comments);
           } else {
             alert("加载图片分类，数据错误");
           }
@@ -76,13 +76,10 @@ export default {
             this.comments.unshift(newMsg);
             this.msg = "";
             Toast(res.body.message);
-           
           }
         });
-
-      /* this.comments.unshift(newMsg) */
     },
-  }
+  },
 };
 </script>
 <style  lang='scss' scoped>

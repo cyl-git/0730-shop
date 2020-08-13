@@ -9,7 +9,7 @@ const { VueLoaderPlugin } = require('vue-loader')
 
 
 module.exports = {
-
+    mode: 'development',
     entry: path.join(__dirname, './src/main.js'), //   entry 入口
     output: {                                     //   output 出口
         path: path.join(__dirname, './dist'),
@@ -36,7 +36,7 @@ module.exports = {
                     options: {
                         name: '[name].[ext]',  //打包出来的图片名字和后缀都和之前的一样
                         outputPath: "images/",
-                        limit: 2048 ,//当图片大小超过2048个字节的时候，将打包的图片存在dist/images文件夹中，否则直接改为base64格式放在bundle.js中，可以减少http请求
+                        limit: 2048,//当图片大小超过2048个字节的时候，将打包的图片存在dist/images文件夹中，否则直接改为base64格式放在bundle.js中，可以减少http请求
                         esModule: false
                     }
                 }
