@@ -46,7 +46,7 @@
         <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
           <a href="#">
             <span class="mui-icon mui-icon-phone"></span>
-            <div class="mui-media-body">练习我们{{cyl_count}}</div>
+            <div class="mui-media-body">练习我们</div>
           </a>
         </li>
       </ul>

@@ -5,6 +5,7 @@
     <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
       <div class="bell" v-show="flag" ref="bell"></div>
     </transition>
+
     <!-- 轮播图区域 -->
     <div class="mui-card">
       <div class="mui-card-content">
@@ -125,7 +126,9 @@ export default {
       //开始调用store中的mutations中的addToCar方法来操作state中的cart购物车 ，这个方法需要传递一个添加的商品id和count
       this.$store.commit("addToCar", {
         id: this.id,
-        count: this.count,
+        count: parseInt(this.count),
+        selected: true,
+        price: parseInt(this.goodsInfo.sell_price),
       });
     },
     beforeEnter(el) {
