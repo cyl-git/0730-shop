@@ -15,7 +15,7 @@
           <div class="pr">￥{{item.sell_price}}</div>
 
           <div>
-            <nobox style="height:20px;" :initCount="$store.getters.countObj[item.id]" :id="item.id"></nobox>
+            <nobox style="height:30px;" :initCount="$store.getters.countObj[item.id]" :id="item.id"></nobox>
           </div>
           <div>
             <a @click="delCar(item.id)">删除</a>
